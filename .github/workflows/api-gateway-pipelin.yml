@@ -32,38 +32,37 @@ jobs:
           cd api-gateway
           ./mvnw test
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    needs: test
+    build-and-push:
+      runs-on: ubuntu-latest
+      needs: test
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
 
-      - name: Set up JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+        - name: Set up JDK
+          uses: actions/setup-java@v4
+          with:
+            distribution: temurin
+            java-version: 17
 
-      - name: Build JAR
-        run: |
-          cd api-gateway
-          ./mvnw clean package -DskipTests
+        - name: Build JAR
+          run: |
+            cd api-gateway
+            ./mvnw clean package -DskipTests
 
-      - name: Docker login
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKER_USER }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+        - name: Docker login
+          uses: docker/login-action@v3
+          with:
+            username: ${{ secrets.DOCKER_USER }}
+            password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./api-gateway
-          push: true
-          tags: |
-            d4rkops/api-gateway:${{ github.sha }}
-            d4rkops/api-gateway:dev
-#holas probando
+        - name: Build and push image
+          uses: docker/build-push-action@v5
+          with:
+            context: ./api-gateway
+            push: true
+            tags: |
+              d4rkops/api-gateway:${{ github.sha }}
+              d4rkops/api-gateway:dev
+  #holas probando
