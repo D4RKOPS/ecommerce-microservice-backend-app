@@ -8,6 +8,11 @@ spring:
     active:
     - dev
 
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false    
+
 resilience4j:
   circuitbreaker:
     instances:
