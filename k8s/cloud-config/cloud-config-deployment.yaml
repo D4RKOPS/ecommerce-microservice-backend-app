@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-config-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cloud-config
+  template:
+    metadata:
+      labels:
+        app: cloud-config
+    spec:
+      containers:
+      - name: cloud-config
+        image: selimhorri/cloud-config-ecommerce-boot:0.1.0
+        ports:
+          - containerPort: 9226
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            valueFrom:
+              configMapKeyRef:
+                name: common-config
+                key: SPRING_PROFILES_ACTIVE
+          - name: eureka.client.service-url.defaultZone
+            valueFrom:
+              configMapKeyRef:
+                name: common-config
+                key: EUREKA_URL
+          - name: SPRING_CLOUD_CONFIG_URI
+            valueFrom:
+              configMapKeyRef:
+                name: common-config
+                key: CONFIG_SERVER_URL
+          - name: spring.zipkin.base-url
+            valueFrom:
+              configMapKeyRef:
+                name: common-config
+                key: ZIPKIN_URL
